@@ -3,8 +3,11 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {Link} from "react-router";
+import {useContext} from "react";
+import {UseLoinUserContext} from "../provider/LoginUserProvider.jsx";
 
 export default function HeaderNav() {
+    const  [loginUser, ]= useContext(UseLoinUserContext);
     return (
         <>
             <Navbar expand="lg" className="bg-body-tertiary">
@@ -20,8 +23,19 @@ export default function HeaderNav() {
                             </NavDropdown>
                         </Nav>
                         <Nav>
-                            <Nav.Link as={Link} to="/login">로그인</Nav.Link>
-                            <Nav.Link as={Link} to="/signup">회원가입</Nav.Link>
+                            {
+                                loginUser ?
+                                <>
+                                    <Nav.Link as={Link} to="/user/detail">
+                                        {loginUser.name}({loginUser.id})
+                                    </Nav.Link>
+                                    <Nav.Link as={Link} to="/logout">로그아웃</Nav.Link>
+                                </> :
+                                <>
+                                    <Nav.Link as={Link} to="/login">로그인</Nav.Link>
+                                    <Nav.Link as={Link} to="/signup">회원가입</Nav.Link>
+                                </>
+                            }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
