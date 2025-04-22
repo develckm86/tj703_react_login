@@ -8,12 +8,13 @@ import {UseLoinUserContext} from "../provider/LoginUserProvider.jsx";
 
 export default function HeaderNav() {
     const  [loginUser, setLoginUser ]= useContext(UseLoinUserContext);
-    const navigate=useNavigate();
+    //const navigate=useNavigate();
     function logoutHandler(){
         localStorage.removeItem("jwt");
         setLoginUser(()=>null);
         alert("다시 찾아주세요~");
-        navigate("/");
+        // navigate("/");
+        location.href="/"; //완전히 새로고침 데이터를 캐싱하고 있어서
     }
     return (
         <>

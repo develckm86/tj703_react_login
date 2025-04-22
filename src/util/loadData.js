@@ -1,7 +1,33 @@
 const serverUrl="http://localhost:7777";
 const LOGIN_URL=`${serverUrl}/user/jwt/login.do`;
 const CHECK_LOGIN_URL=`${serverUrl}/user/jwt/check.do`;
+const ADMIN_USERS_URL=`${serverUrl}/admin/user/list.do`;
 //CHECK_LOGIN_URL : 로그인되었는지 확인 => 만약 로그인되어 있다면 jwt 새로발급(만료시간을 업데이트)
+export async function fetchAuth(url,option={}){
+//모든 요청에 로그인 정보인 jwt를 해더에 포함하는 커스텀 fetch
+    const jwt=localStorage.getItem("jwt");
+    const response=await fetch(url,{
+        ...option,
+        headers : {
+            "Authorization":"Bearer "+jwt,
+            ...(option.headers && option.headers)
+        },
+    });
+    if(!response.ok){throw new Error(response.status+"");}
+    return response;
+}
+
+
+export async function loadAdminUserList(){
+    const jwtToken=localStorage.getItem("jwt");
+
+    if(jwtToken==null){throw new Error(403+"");}
+
+    const resp=await fetchAuth(ADMIN_USERS_URL);
+    return await resp.json(); //{[user],[user]...}
+}
+
+
 
 export async function loadCheckLogin(){
     const jwtToken=localStorage.getItem("jwt");
@@ -9,16 +35,10 @@ export async function loadCheckLogin(){
         //throw new Error("jwtToken is null");
         return null;
     }
+    const response=await fetchAuth(CHECK_LOGIN_URL);
 
-    const response=await fetch(CHECK_LOGIN_URL,{
-        headers : {
-            "Authorization":"Bearer "+jwtToken
-        }
-    });
-    if(!response.ok){
-        //jwt가 만료됨
+    if(!response.ok){//jwt가 만료됨
         localStorage.removeItem("jwt");
-        throw new Error(response.status+"");
     }
     const {jwt,user} = await response.json();
     console.log(jwt,user);

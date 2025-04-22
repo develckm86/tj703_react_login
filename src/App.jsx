@@ -1,6 +1,6 @@
 import HeaderNav from "./component/HeaderNav.jsx";
 import Container from "react-bootstrap/Container";
-import {BrowserRouter, Link, Route, Routes} from "react-router";
+import {BrowserRouter, Link, Navigate, Outlet, Route, Routes} from "react-router";
 import Home from "./page/Home.jsx";
 import BoardList from "./page/board/BoardList.jsx";
 import AdminUserList from "./page/admin/user/AdminUserList.jsx";
@@ -36,7 +36,7 @@ function App() {
                     <Route path="/board">
                         <Route path="list" element={<BoardList/>}/>
                     </Route>
-                    <Route path="/admin">
+                    <Route path="/admin" element={<AdminCheckFilter/>}>
                         <Route path="user">
                             <Route path="list" element={<AdminUserList/>}/>
                         </Route>
@@ -46,5 +46,22 @@ function App() {
         </BrowserRouter>
     )
 }
+
+function LoginCheckFilter({children}){}
+function AdminCheckFilter({children}){
+    const [loginUser,]=useContext(UseLoinUserContext);
+    if(loginUser && loginUser.role==="ADMIN"){
+        if(children){
+            return children;
+        }else{
+            return <Outlet/>;
+        }
+    }else{
+        alert("해당 페이지에 권한이 없습니다.")
+        return <Navigate to="/login"/>
+    }
+}
+
+
 
 export default App
