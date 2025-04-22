@@ -33,7 +33,7 @@ function App() {
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/signup" element={<Signup/>}/>
 
-                    <Route path="/board">
+                    <Route path="/board" element={<LoginCheckFilter/>}>
                         <Route path="list" element={<BoardList/>}/>
                     </Route>
                     <Route path="/admin" element={<AdminCheckFilter/>}>
@@ -47,7 +47,19 @@ function App() {
     )
 }
 
-function LoginCheckFilter({children}){}
+function LoginCheckFilter({children}){
+    const [loginUser,]=useContext(UseLoinUserContext);
+    if(loginUser){
+        if(children){
+            return children;
+        }else{
+            return <Outlet/>;
+        }
+    }else{
+        alert("로그인 하세요!")
+        return <Navigate to="/login"/>
+    }
+}
 function AdminCheckFilter({children}){
     const [loginUser,]=useContext(UseLoinUserContext);
     if(loginUser && loginUser.role==="ADMIN"){

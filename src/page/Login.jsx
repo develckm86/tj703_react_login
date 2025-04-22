@@ -5,6 +5,8 @@ import {loadLogin} from "../util/loadData.js";
 import {UseLoinUserContext} from "../provider/LoginUserProvider.jsx";
 import {useQuery} from "@tanstack/react-query";
 import {useNavigate} from "react-router";
+import {GoogleLogin} from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode";
 
 export default function Login() {
     const navigate=useNavigate();
@@ -65,6 +67,13 @@ export default function Login() {
                 {/*inline :text, button,image inline-block*/}
                 <p className="text-end">
                     <Button variant="outline-success" type="submit">로그인</Button>
+                </p>
+                <p>
+                    <GoogleLogin onSuccess={(credentialResponse)=>{
+                        //npm i jwt-decode
+                        const user=jwtDecode(credentialResponse.credential);
+                        console.log(user);
+                    }}/>
                 </p>
             </form>
         </div>);
