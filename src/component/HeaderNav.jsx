@@ -2,12 +2,19 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import {useContext} from "react";
 import {UseLoinUserContext} from "../provider/LoginUserProvider.jsx";
 
 export default function HeaderNav() {
-    const  [loginUser, ]= useContext(UseLoinUserContext);
+    const  [loginUser, setLoginUser ]= useContext(UseLoinUserContext);
+    const navigate=useNavigate();
+    function logoutHandler(){
+        localStorage.removeItem("jwt");
+        setLoginUser(()=>null);
+        alert("다시 찾아주세요~");
+        navigate("/");
+    }
     return (
         <>
             <Navbar expand="lg" className="bg-body-tertiary">
@@ -29,7 +36,7 @@ export default function HeaderNav() {
                                     <Nav.Link as={Link} to="/user/detail">
                                         {loginUser.name}({loginUser.id})
                                     </Nav.Link>
-                                    <Nav.Link as={Link} to="/logout">로그아웃</Nav.Link>
+                                    <Nav.Link  onClick={logoutHandler}>로그아웃</Nav.Link>
                                 </> :
                                 <>
                                     <Nav.Link as={Link} to="/login">로그인</Nav.Link>
