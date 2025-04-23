@@ -11,7 +11,7 @@ const queryClient=new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
       <QueryClientProvider client={queryClient}>
-          <GoogleOAuthProvider clientId={"453194321429-lukj54ub0hcn1craed8e0svt8ijlgu0q.apps.googleusercontent.com"}>
+          <GoogleOAuthProvider clientId={"453194321429-npag0keqph5uc0go9fem80ufr6gp6vk5.apps.googleusercontent.com"}>
               <LoginUerProvider>
                 {/* LoginUerProvider => UseLoinUserContext.value={[loginUser,setLoginUser]} */}
                 <App />

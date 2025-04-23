@@ -1,7 +1,7 @@
 import {Button, FloatingLabel} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import {useContext, useState} from "react";
-import {loadLogin} from "../util/loadData.js";
+import loadGoogleLogin, {loadLogin} from "../util/loadData.js";
 import {UseLoinUserContext} from "../provider/LoginUserProvider.jsx";
 import {useQuery} from "@tanstack/react-query";
 import {useNavigate} from "react-router";
@@ -69,11 +69,7 @@ export default function Login() {
                     <Button variant="outline-success" type="submit">로그인</Button>
                 </p>
                 <p>
-                    <GoogleLogin onSuccess={(credentialResponse)=>{
-                        //npm i jwt-decode
-                        const user=jwtDecode(credentialResponse.credential);
-                        console.log(user);
-                    }}/>
+                    <GoogleLogin onSuccess={loadGoogleLogin}/>
                 </p>
             </form>
         </div>);
