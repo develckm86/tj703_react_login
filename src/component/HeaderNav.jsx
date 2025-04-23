@@ -5,6 +5,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import {Link, useNavigate} from "react-router";
 import {useContext} from "react";
 import {UseLoinUserContext} from "../provider/LoginUserProvider.jsx";
+import {Image} from "react-bootstrap";
 
 export default function HeaderNav() {
     const  [loginUser, setLoginUser ]= useContext(UseLoinUserContext);
@@ -35,6 +36,8 @@ export default function HeaderNav() {
                                 loginUser ?
                                 <>
                                     <Nav.Link as={Link} to="/user/detail">
+                                        {loginUser.picture &&
+                                            <Image className="me-2" width={27} src={loginUser.picture} roundedCircle/>}
                                         {loginUser.name}({loginUser.id})
                                     </Nav.Link>
                                     <Nav.Link  onClick={logoutHandler}>로그아웃</Nav.Link>

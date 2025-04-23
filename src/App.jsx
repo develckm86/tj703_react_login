@@ -13,6 +13,7 @@ import {UseLoinUserContext} from "./provider/LoginUserProvider.jsx";
 
 function App() {
     const [,setLoginUser] = useContext(UseLoinUserContext)
+    //useMutation => userQuery 캐싱된 user를 가져옴
     const loginCheckMutate=useMutation({
         mutationFn: loadCheckLogin,
         onSuccess:(user)=>{

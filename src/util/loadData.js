@@ -3,20 +3,31 @@ import {jwtDecode} from "jwt-decode";
 const serverUrl="http://localhost:7777";
 const LOGIN_URL=`${serverUrl}/user/jwt/login.do`;
 const OAUTH_URL=`${serverUrl}/user/oauth/login.do`;
+const OAUTH_SIGNUP_URL=`${serverUrl}/user/oauth/signup.do`;
 const CHECK_LOGIN_URL=`${serverUrl}/user/jwt/check.do`;
 const ADMIN_USERS_URL=`${serverUrl}/admin/user/list.do`;
-export default async function loadGoogleLogin(credentialResponse){
-    //credentialResponse 서명된 로그인 유저 (jwt)
-    const googleUser=jwtDecode(credentialResponse.credential);
+export async function loadOAuthSignup(signupUser){
+    const resp=await fetch(OAUTH_SIGNUP_URL,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(signupUser)
+    })
+    if(!resp.ok){ throw new Error(resp.status+"");}
+    const {jwt,user}=await resp.json();
+    localStorage.setItem("jwt",jwt);
+    return user;
+}
+
+
+
+
+export async function loadGoogleLogin(googleUser){
     googleUser["oauth"]="GOOGLE";
     const response=await fetch(OAUTH_URL,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(googleUser)
     })
-    console.log(response.status)
-    const {jwt,user}=await response.json();
-    console.log(jwt,user);
     return response;
 }
 
