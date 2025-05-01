@@ -54,7 +54,7 @@ export default function Login() {
                 return user;
             }else if(resp.status===404){
                 //navigate.state 를 컴포넌트에 보낼수 있다. => uesLocation.state 로 받는다
-                navigate("/signup" , {
+                navigate("/oauth/signup" , {
                     state:{
                         error : "회원가입 후 로그인 하세요.",
                         user : googleUser,

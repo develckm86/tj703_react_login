@@ -1,11 +1,22 @@
-import {jwtDecode} from "jwt-decode";
-
-const serverUrl="http://localhost:7777";
+// const serverUrl="http://localhost:7777";
+const serverUrl="";
 const LOGIN_URL=`${serverUrl}/user/jwt/login.do`;
 const OAUTH_URL=`${serverUrl}/user/oauth/login.do`;
 const OAUTH_SIGNUP_URL=`${serverUrl}/user/oauth/signup.do`;
+const SIGNUP_URL=`${serverUrl}/user/signup.do`;
 const CHECK_LOGIN_URL=`${serverUrl}/user/jwt/check.do`;
 const ADMIN_USERS_URL=`${serverUrl}/admin/user/list.do`;
+export async function loadSignup(signupForm){
+    const formData=new FormData(signupForm);
+    const resp=await fetch(SIGNUP_URL,{
+        method:"POST",
+        body:formData
+    })
+    if(!resp.ok){ throw new Error(resp.status+"");}
+    const {jwt,user}=await resp.json();
+    localStorage.setItem("jwt",jwt);
+    return user;
+}
 export async function loadOAuthSignup(signupUser){
     const resp=await fetch(OAUTH_SIGNUP_URL,{
         method:"POST",

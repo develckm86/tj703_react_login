@@ -1,23 +1,22 @@
 import {useLocation, useNavigate} from "react-router";
-import {Button, FloatingLabel, InputGroup} from "react-bootstrap";
+import {Button, FloatingLabel} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import {useContext, useState} from "react";
 import {useMutation} from "@tanstack/react-query";
-import {loadOAuthSignup, loadSignup} from "../util/loadData.js";
+import {loadOAuthSignup} from "../util/loadData.js";
 import {UseLoinUserContext} from "../provider/LoginUserProvider.jsx";
-import InputGroupText from "react-bootstrap/InputGroupText";
 
-export default function Signup() {
+export default function OAuthSignup() {
+    const location=useLocation();
+    const {error,user}=location.state;
     const [ ,setLoginUser]=useContext(UseLoinUserContext);
     const navigate=useNavigate();
     const [signupUser,setSignupUser]=useState({
-        id : "",
-        name : "",
-        pw : "",
-        pwRe : "",
+        ...(user && user),
+        id : user.email
     });
     const signupMutate=useMutation({
-        mutationFn :loadSignup,
+        mutationFn :loadOAuthSignup,
         onSuccess : (user)=>{
             setLoginUser(()=>user);
             alert("회원가입 성공")
@@ -35,30 +34,25 @@ export default function Signup() {
 
     function signupSubmitHandler(e){
         e.preventDefault();
-        const signupForm=e.target;
-        signupMutate.mutate(signupForm);
+        signupMutate.mutate(signupUser);
     }
-
     return (
         <div className="text-center">
+            {error && <p>{error}</p>}
             {signupMutate.isError && <p>{signupMutate.error.message}</p>}
             <h1 className="my-5">회원가입</h1>
             <form style={{width:"400px"}} className="mx-auto" onSubmit={signupSubmitHandler}>
                 <FloatingLabel label="email" className="mb-3">
-                    <Form.Control value={signupUser.id} name="id" onChange={inputHandler}/>
+                    <Form.Control value={signupUser.id} name="id" readOnly={true}/>
                 </FloatingLabel>
-                <InputGroup className="mb-3">
-                    <InputGroupText>프로필 이미지</InputGroupText>
-                    <Form.Control  type="file" name="pictureFile" multiple={true} />
-                </InputGroup>
+                <FloatingLabel label="소셜" className="mb-3">
+                    <Form.Control value={signupUser.oauth} name="oauth" readOnly={true}/>
+                </FloatingLabel>
+                <FloatingLabel label="프로필" className="mb-3">
+                    <Form.Control value={signupUser.picture} name="picture" readOnly={true}/>
+                </FloatingLabel>
                 <FloatingLabel label="name" className="mb-3">
                     <Form.Control value={signupUser.name} name="name" onChange={inputHandler}/>
-                </FloatingLabel>
-                <FloatingLabel label="비밀번호" className="mb-3">
-                    <Form.Control value={signupUser.pw} name="pw" onChange={inputHandler}/>
-                </FloatingLabel>
-                <FloatingLabel label="비밀번호 확인" className="mb-3">
-                    <Form.Control value={signupUser.pwRe} name="pwRe"onChange={inputHandler}/>
                 </FloatingLabel>
                 <p className="text-end">
                     <Button className="me-2" type="reset" variant="outline-warning">초기화</Button>

@@ -10,6 +10,7 @@ import {useContext, useEffect} from "react";
 import {loadCheckLogin} from "./util/loadData.js";
 import {useMutation} from "@tanstack/react-query";
 import {UseLoinUserContext} from "./provider/LoginUserProvider.jsx";
+import OAuthSignup from "./page/OAuthSignup.jsx";
 
 function App() {
     const [,setLoginUser] = useContext(UseLoinUserContext)
@@ -33,6 +34,7 @@ function App() {
                     <Route path="/" element={<Home/>}/>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/signup" element={<Signup/>}/>
+                    <Route path="/oauth/signup" element={<OAuthSignup/>}/>
 
                     <Route path="/board" element={<LoginCheckFilter/>}>
                         <Route path="list" element={<BoardList/>}/>
